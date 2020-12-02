@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooky</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        .search {
+            text-align: center;
+            margin: auto;
+            width: 60%;
+            padding: 10px;
+        }
+
+        #textbox_search {
+            height: 25px;
+            font-size: 14pt;
+            width: 400px;
+        }
+
+        #search_btn {
+            font-size: 20px;
+        }
+
+        #add_btn {
+            font-size: 20px;
+        }
+
+        .recipe {
+            background-color: bisque;
+            font-family: 'Gill Sans';
+            font-size: large;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="recipe1">
+        <!-- <p>Ten mon an: </p>
+        <p>Mo ta: </p>
+        <p>Nguyen lieu: </p>
+        <br>
+        <br> -->
+
+    </div>
+    <script>
+        $(document).ready(function () {
+            $.getJSON("/ingredients?id={{ ids }}", function (data) {
+                ings = data.result;
+                let a = '<h2>Danh sách nguyên liệu<h2>';
+                for (var i = 0; i < ings.length; i++) {
+                    a = a + '<li>' + ings[i].toString() + '</li>'
+                }
+                a = a + '<a href="/demo?id={{ ids }}">GO TO DEMO</a>';
+                if (ings.length == 0) a = 'Khong tim thay gi!!';
+
+                $("#recipe1").html(a);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

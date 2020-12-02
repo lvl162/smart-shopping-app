@@ -1,24 +1,92 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooky</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        .search {
+            text-align: center;
+            margin: auto;
+            width: 60%;
+            padding: 10px;
+        }
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        #textbox_search {
+            height: 25px;
+            font-size: 14pt;
+            width: 400px;
+        }
 
-    <title>Live Streaming Demonstration</title>
+        #search_btn {
+            font-size: 20px;
+        }
+
+        #add_btn {
+            font-size: 20px;
+        }
+
+        .recipe {
+            background-color: bisque;
+            font-family: 'Gill Sans';
+            font-size: large;
+        }
+    </style>
+
 </head>
+
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8  offset-lg-2">
-            <h3 class="mt-5">Live Streaming</h3>
-            <img src="{{ url_for('video_feed') }}" width="100%">
-        </div>
+    <div class='search'>
+        <input id='textbox_search' type="text" autofocus>
+        <button id='search_btn'>Search</button>
+        <button id='add_btn'>Them NL</button>
+
     </div>
-</div>
+
+    <div id="recipe1">
+        <!-- <p>Ten mon an: </p>
+        <p>Mo ta: </p>
+        <p>Nguyen lieu: </p>
+        <br>
+        <br> -->
+
+    </div>
+    <script>
+        $("#search_btn").click(function () {
+            let name = $("#textbox_search").val()
+            if (name != '') {
+                console.log(name);
+                $.getJSON(`/recipes?name=${name}`, function (data) {
+                    console.log(data);
+                    ings = data.result;
+                    let a = '';
+                    for (var i = 0; i < ings.length; i++) {
+                        a = a + '<div class ="recipe"><p>Ten mon an: ' + ings[i]['name'] + '</p>';
+                        a = a + '<p>Mota: ' + ings[i]['description'] + '</p>';
+                        a = a + '<div>Nguyen lieu: <br>';
+                        for (const [key, value] of Object.entries(ings[i]['ingredients'])) {
+                            a = a + '<li>' + key + ' : ' + value + '</li>'
+                        }
+                        a = a + '</div></div>'
+                        a = a + `<input type="checkbox" value="${ings[i]['id']}" name="ids">Thêm</input>`
+                        a = a + '<br>'
+                    }
+                    $("#recipe1").html(a);
+                });
+            }
+        });
+        $("#add_btn").click(function () {
+            var ids = [];
+            $.each($("input[name='ids']:checked"), function () {
+                ids.push($(this).val());
+            });
+            // alert("My favourite sports are: " + favorite.join(", "));
+            window.location.href = "/pre_demo?id=" + ids.join(',');
+        });
+    </script>
+
 </body>
+
 </html>
