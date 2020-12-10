@@ -1,0 +1,63 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id='title'></title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='item-style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <section class="section cocktail-section">
+        <h2 class="section-title" id='name'></h2>
+        <div class="drink">
+            <img id="img" alt="">
+            <div class="drink-info">
+
+                <!-- <p>
+                    <span class="drink-data">category</span>
+                </p> -->
+                <p>
+                    <span class="drink-data">info</span>
+                </p>
+                <div id='description'></div>
+                <p>
+                    <span class="drink-data">ingredients</span>
+                <div id='ing'></div>
+                </p>
+                <p>
+                    <span class="drink-data">recipe</span>
+                <div id='cach_nau'></div>
+                </p>
+            </div>
+        </div>
+    </section>
+    <script>
+        $(document).ready(function () {
+            var ings;
+            $.getJSON('/recipes?id={{ ids }}', function (data) {
+                res = data.result[0]
+                ings = res['ingredients'];
+                let ing_list = '';
+                let cach_nau = '';
+                for (const [key, value] of Object.entries(ings)) {
+                    ing_list = ing_list + '<li>' + key + ' : ' + value + '</li>'
+                }
+                for (let i = 0; i < res['cooking_steps'].length; i++) {
+                    cach_nau = cach_nau + '<li>' + res['cooking_steps'][i] + '</li>'
+                }
+                $("#description").html(res['description']);
+                $("#ing").html(ing_list);
+                $("#cach_nau").html(cach_nau);
+                $("#title").html(res['name']);
+                $("#name").html(res['name']);
+                $('#img').attr('src', res['image']);
+            });
+
+        });
+
+    </script>
+</body>
+
+</html>

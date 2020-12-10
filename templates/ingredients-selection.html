@@ -1,0 +1,77 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='item-style.css') }}">
+
+    <title>Chọn nguyên liệu!!</title>
+</head>
+
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <section class="ingre" id="recipe1">
+    </section>
+
+
+    <div id="recipe1">
+    </div>
+    <script>
+        $(document).ready(function () {
+            var ings;
+            var choosen;
+            var rms = [];
+            $.getJSON("/ingredients?id={{ ids }}", function (data) {
+                ings = data.result;
+                choosen = Array.from(ings);
+                let a = '<h3 class="section-title">Lựa chọn nguyên liệu</h3>';
+                for (var i = 0; i < ings.length; i++) {
+                    a = a + `<div class="item" id='ingre-${i}'>
+                            <h4 id='${i}'>${ings[i].toString()}</h4>
+                            <button class="no_buy">Không cần mua</button>
+                            </div>`;
+                }
+                // a = a + '<a href="/demo?id={{ ids }}"><button class="btn btn-primary">Theo dõi quá trình đi chợ</button></a>';
+                a = a + '<a><button class="btn btn-primary">Theo dõi quá trình đi chợ</button></a>';
+
+                if (ings.length == 0) a = 'Khong tim thay gi!!';
+
+                $("#recipe1").html(a);
+                $(".no_buy").click(function () {
+                    if (confirm('Chac chua?')) {
+                        Array.prototype.remove = function () {
+                            var what, a = arguments, L = a.length, ax;
+                            while (L && this.length) {
+                                what = a[--L];
+                                while ((ax = this.indexOf(what)) !== -1) {
+                                    this.splice(ax, 1);
+                                }
+                            }
+                            return this;
+                        };
+
+                        let id = $(this).prev().attr('id');
+                        rms.push(id);
+                        let name = $(this).prev().html();
+                        choosen.remove(name);
+                        $("#ingre-" + id).remove();
+                    } else {
+                    }
+
+                });
+                $('.btn-primary').click(function () {
+                    if (rms.length != 0)
+                        window.location.href = "/demo?id={{ ids }}&rm=" + rms.join(',');
+                    else window.location.href = "/demo?id={{ ids }}";
+                });
+            });
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>

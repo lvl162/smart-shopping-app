@@ -11,7 +11,9 @@ app = Flask(__name__)
 
 
 app.config['MONGO_DBNAME'] = 'CookyCooky'
-app.config['MONGO_URI'] = 'mongodb+srv://lvl162:1622000@cluster0.gabg8.gcp.mongodb.net/CookyCooky?retryWrites=true&w=majority'
+# app.config['MONGO_URI'] = 'mongodb+srv://lvl162:1622000@cluster0.gabg8.gcp.mongodb.net/CookyCooky?retryWrites=true&w=majority'
+app.config['MONGO_URI'] = 'mongodb://127.0.0.1:27017/CookyCooky'
+
 mongo = PyMongo(app)
 
 
@@ -21,6 +23,10 @@ mongo = PyMongo(app)
 # for local webcam use cv2.VideoCapture(0)
 
 SEEN_OBJ = list()
+
+
+def clear_seen(obj):
+    obj = list()
 
 
 @app.route('/favicon.ico')
@@ -72,9 +78,11 @@ def get_seen():
 @app.route('/video_feed1')
 def video_feed1():
     # Video streaming route. Put this in the src attribute of an img tag
-    stream_url = "http://192.168.0.105:8080/video"
-    weights_path = './best_500_7.pt'
-    return Response(detect(source=stream_url, conf_thres=0.85, weights=weights_path), mimetype='multipart/x-mixed-replace; boundary=frame')
+    stream_url = "http://192.168.137.135:8080/video"
+    # stream_url = "http://192.168.0.10:8000/stream.mjpg"
+    # stream_url = "0"
+    weights_path = './best_1000_7.pt'
+    return Response(detect(source=stream_url, conf_thres=0.7, weights=weights_path), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.errorhandler(404)
@@ -87,20 +95,47 @@ def pre_demo():
     id = request.args.get('id')
     if not id:
         id = 6969
-    return render_template('pre_demo.html', ids=id)
+    return render_template('ingredients-selection.html', ids=id)
 
 
-@app.route('/demo')
+@app.route('/demo', methods=['GET', 'POST'])
 def demo():
     """Video streaming home page."""
     # print(STRING)
-    id = request.args.get('id')
-    if not id:
-        id = ''
-    return render_template('demo.html', ids=id)
+    clear_seen(SEEN_OBJ)
+
+    if request.method == 'GET':
+        id = request.args.get('id')
+        if not id:
+            id = ''
+        rm = request.args.get('rm')
+        if not rm:
+            rm = ''
+        return render_template('demo.html', ids=id, rms=rm)
+    if request.method == 'POST':
+        pass
+
+
+@app.route('/search')
+def search():
+    return render_template('search.html')
 
 
 @app.route('/index')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/recipeDetails')
+def details():
+    id = request.args.get('id')
+    if id:
+        # recipe = mongo.db.recipes
+        # s = recipe.find_one({'id': int(id)})
+
+        return render_template('singleItem.html', ids=id)
+
+
 def index():
     return render_template('index.html')
 
@@ -109,13 +144,21 @@ def index():
 def show_ingredients():
     ids = request.args.get('id')
     ings = []
+    rms = request.args.get('rm')
     if ids:
         id = ids.split(',')
         recipe = mongo.db.recipes
         for i in id:
             s = recipe.find_one({'id': int(i)})
             ings = ings + list(dict(s['ingredients']).keys())
-
+        if rms:
+            rm_arr = rms.split(',')
+            rm_int = [int(i) for i in rm_arr]
+            ings_tmp = list(ings)
+            for index, ing in enumerate(ings):
+                if index in rm_int:
+                    ings_tmp.remove(ing)
+            ings = list(ings_tmp)
     return jsonify({'result': ings})
 
 
@@ -128,20 +171,20 @@ def get_all_recipes():
         recipe = mongo.db.recipes
         s = recipe.find_one({'id': int(id)})
         output.append(
-            {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients']})
+            {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients'], 'image': s['image'], 'likes': s['likes'], 'cooking_steps': s['cooking_steps'], 'ration': s['ration']})
     elif name:
         recipe = mongo.db.recipes
         for s in recipe.find():
             if convert(s['name']).find(convert(name)) >= 0:
                 output.append(
-                    {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients']})
+                    {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients'], 'image': s['image'], 'likes': s['likes'], 'cooking_steps': s['cooking_steps'], 'ration': s['ration']})
     else:
         recipe = mongo.db.recipes
         for s in recipe.find():
             output.append(
-                {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients']})
+                {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients'], 'image': s['image'], 'likes': s['likes'], 'cooking_steps': s['cooking_steps'], 'ration': s['ration']})
     return jsonify({'result': output})
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

@@ -22,6 +22,6 @@ def convert(text):
         output = re.sub(regex, replace, output)
         # deal with upper case
         output = re.sub(regex.upper(), replace.upper(), output)
-    return output
+    return output.lower()
 
 

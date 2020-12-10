@@ -2,58 +2,26 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='item-style.css') }}">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <title>DEMO</title>
 </head>
-<style>
-    * {
-        box-sizing: border-box;
-    }
 
-    /* Create two equal columns that floats next to each other */
-    .column1 {
-        float: left;
-        width: 80%;
-        padding: 10px 50px 50px 50px;
-        height: 750px;
-        /* Should be removed. Only for demonstration */
-    }
-
-    .column2 {
-        float: left;
-        width: 20%;
-        padding: 50px;
-        height: 650px;
-        /* Should be removed. Only for demonstration */
-    }
-
-    /* Clear floats after the columns */
-    .row:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-</style>
 
 <body>
     <script>
         $(document).ready(function () {
             var ings;
-            $.getJSON('/ingredients?id={{ ids }}', function (data) {
+            $.getJSON('/ingredients?id={{ ids }}&rm={{ rms }}', function (data) {
                 ings = data.result;
                 let a = '';
                 for (var i = 0; i < ings.length; i++) {
-                    a = a + '<div>' + ings[i].toString() + '</div>'
+                    a = a + '<div class="item">' + `<h4>${ings[i].toString()}</h4>` + '</div>';
                 }
-                console.log(a);
                 $("#ing").html(a);
             });
             setInterval(function () {
@@ -61,20 +29,18 @@
                     seens = data.get_seen;
                     let a = '';
                     for (var i = 0; i < seens.length; i++) {
-                        a = a + '<div>' + seens[i].toString() + '</div>'
+                        if (ings.includes(seens[i])) {
+                            a = a + '<div class="item">' + `<h4>${seens[i].toString()}</h4>` + '</div>';
+                        }
                     }
-                    console.log(a);
                     $("#seen").html(a);
                     let b = ''
                     for (var i = 0; i < ings.length; i++) {
                         if (seens.includes(ings[i]) == false) {
-                            b = b + '<div>' + ings[i].toString() + '</div>'
+                            b = b + '<div class="item">' + `<h4>${ings[i].toString()}</h4>` + '</div>';
                         }
 
                     }
-                    // if (b == '') {
-                    //     b = "BAN DA MUA HET OI !!!";
-                    // }
                     $("#ing").html(b);
 
                 });
@@ -83,19 +49,27 @@
 
     </script>
     <div class="row">
-        <div class="column1">
-            <h2>Live Streaming</h2>
-
-            <img src="{{ url_for('video_feed1') }}" width="100%" height="100%">
+        <div class="column left">
+            <section class="ingre">
+                <h3 class="section-title">Cần mua</h3>
+                <div id='ing'></div>
+                <!-- <div class="item">
+                    <h4>name</h4>
+                </div>
+                <div class="item">
+                    <h4>name</h4>
+                </div> -->
+                <h3 class="section-title">Đã mua</h3>
+                <div id='seen'></div>
+            </section>
         </div>
-        <div class="column2" style="background-color:#bbb;">
-            <h4>Cần mua</h4>
-            <div id='ing'></div>
-            <br>
-            <br>
-            <br>
-            <h4>Đã mua</h4>
-            <div id='seen'></div>
+        <div class="column right">
+            <section class="livestream">
+                <h3 class="section-title">Theo dõi quá trình đi chợ</h3>
+                <img width="100%" height="100%" src="{{ url_for('video_feed1') }}" alt="">
+                <!-- <img width="100%" height="100%"
+                    src="https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg" alt=""> -->
+            </section>
         </div>
     </div>
 </body>

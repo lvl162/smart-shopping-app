@@ -1,92 +1,209 @@
-<!DOCTYPE html>
+<!-- browser-sync start --server --files "*.html, css/*.css, *js, js/*.js" -->
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cooky</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <style>
-        .search {
-            text-align: center;
-            margin: auto;
-            width: 60%;
-            padding: 10px;
-        }
-
-        #textbox_search {
-            height: 25px;
-            font-size: 14pt;
-            width: 400px;
-        }
-
-        #search_btn {
-            font-size: 20px;
-        }
-
-        #add_btn {
-            font-size: 20px;
-        }
-
-        .recipe {
-            background-color: bisque;
-            font-family: 'Gill Sans';
-            font-size: large;
-        }
-    </style>
-
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>SSS</title>
+	<!-- Font awesome CDN-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+	<!-- Scroll reveal CDN-->
+	<script src="https://unpkg.com/scrollreveal"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
+	<link href='http://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>
+	<!-- Vietnamese font -->
+	<link
+		href="https://fonts.googleapis.com/css2?family=Charm&family=Charmonman:wght@400;700&family=Dancing+Script:wght@500;600;700&display=swap"
+		rel="stylesheet">
 </head>
 
 <body>
-    <div class='search'>
-        <input id='textbox_search' type="text" autofocus>
-        <button id='search_btn'>Search</button>
-        <button id='add_btn'>Them NL</button>
+	<header id="header" class="container">
+		<nav class="nav">
+			<div class="menu-toggle">
+				<i class="fas fa-bars"></i>
+				<i class="fas fa-times"></i>
+			</div>
+			<a href="index.html" class="logo"><img src="{{ url_for('static', filename='images/SSSLogo.png')}}"
+					alt=""></a>
+			<ul class="nav-list">
+				<li class="nav-item">
+					<a href="index.html" class="nav-link">Trang Chủ</a>
+				</li>
+				<li class="nav-item">
+					<a href="/search" class="nav-link">Tra cứu món ăn</a>
+				</li>
+				<li class="nav-item">
+					<a href="#greeting" class="nav-link">Giới thiệu</a>
+				</li>
+				<li class="nav-item">
+					<a href="#footer" class="nav-link">Contact</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	<!-- Header end -->
 
-    </div>
+	<section class="hero" id="hero">
+		<div class="containter">
+			<div class="container">
+				<h2 class="sub-headline">
+					<span class="firstletter">X</span>in Chào
+				</h2>
+				<h1 class="headline">Hệ thống</h1>
+				<div class="headline-description">
+					<div class="separator">
+						<div class="line line-left"></div>
+						<div class="asterisk"><i class="fas fa-asterisk"></i></div>
+						<div class="line line-right"></div>
+					</div>
+					<div class="single-animation">
+						<h5>Hỗ trợ Mua sắm Thông Minh</h5>
+						<a href="#" class="btn cta-btn">Khám Phá</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Hero ends -->
+	<section class="discover-our-story" id="greeting">
+		<div class="container">
+			<div class="restaurant-info">
+				<div class="restaurant-description padding-right animate-left">
+					<div class="global-headline">
+						<h2 class="sub-headline">
+							<span class="first-letter">G</span>iới Thiệu
+						</h2>
+						<h1 class="headline headline-dark">Our Story</h1>
+						<div class="asterisk"><i class="fas fa-asterisk"></i></div>
+					</div>
+					<p>
+						Thay vì phải phụ thuộc vào những cuốn sổ tay hay điện thoại di động <br>
+						Chúng tôi cung cấp giải pháp thông minh phục vụ cho việc mua sắm <br>
+						Với SSS, bạn vừa có thể tra cứu thông tin nấu ăn, vừa giúp cho việc mua sắm dễ dàng hơn <br>
+						We make shopping easier!
+					</p>
+					<a href="#" class="btn body-btn">About us</a>
+				</div>
+				<div class="restaurant-info-img animate-right">
+					<div class="card">
+						<img src="http://cb.dut.udn.vn/ImageSV/18/102180242.jpg" alt="John" style="width:100%">
+						<h1>Trần Vĩnh Đạt</h1>
+						<p class="card-title">In charge of Front-End</p>
+						<p>ĐH Bách Khoa - ĐHĐN</p>
+						<a href="https://github.com/datvinhtran2k"><i class="fa fa-github"></i></a>
+						<a href="https://www.facebook.com/profile.php?id=100002903271986"><i
+								class="fa fa-facebook"></i></a>
+						<p><button class="card-button">Contact</button></p>
+					</div>
 
-    <div id="recipe1">
-        <!-- <p>Ten mon an: </p>
-        <p>Mo ta: </p>
-        <p>Nguyen lieu: </p>
-        <br>
-        <br> -->
-
-    </div>
-    <script>
-        $("#search_btn").click(function () {
-            let name = $("#textbox_search").val()
-            if (name != '') {
-                console.log(name);
-                $.getJSON(`/recipes?name=${name}`, function (data) {
-                    console.log(data);
-                    ings = data.result;
-                    let a = '';
-                    for (var i = 0; i < ings.length; i++) {
-                        a = a + '<div class ="recipe"><p>Ten mon an: ' + ings[i]['name'] + '</p>';
-                        a = a + '<p>Mota: ' + ings[i]['description'] + '</p>';
-                        a = a + '<div>Nguyen lieu: <br>';
-                        for (const [key, value] of Object.entries(ings[i]['ingredients'])) {
-                            a = a + '<li>' + key + ' : ' + value + '</li>'
-                        }
-                        a = a + '</div></div>'
-                        a = a + `<input type="checkbox" value="${ings[i]['id']}" name="ids">Thêm</input>`
-                        a = a + '<br>'
-                    }
-                    $("#recipe1").html(a);
-                });
-            }
-        });
-        $("#add_btn").click(function () {
-            var ids = [];
-            $.each($("input[name='ids']:checked"), function () {
-                ids.push($(this).val());
-            });
-            // alert("My favourite sports are: " + favorite.join(", "));
-            window.location.href = "/pre_demo?id=" + ids.join(',');
-        });
-    </script>
-
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Discover Our Story Ends -->
+	<section class="perfect-blend between">
+		<div class="container">
+			<div class="global-headline">
+				<div class="animate-top">
+					<h2 class="sub-headline">
+						<span class="first-letter">W</span>e have
+				</div>
+				<div class="animate-bottom">
+					<h1 class="headline">thousands of cooking info source</h1>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Perfect Blend ends -->
+	<section class="family-food" id="search">
+		<div class="container">
+			<div class="restaurant-info">
+				<div class="image-group">
+					<img src="{{ url_for('static', filename='images/street-food-4.jpg')}}" class="animate-top"></img>
+					<img src="{{ url_for('static', filename='images/street-food-2.jpg')}}" class="animate-bottom"></img>
+				</div>
+				<div class="restaurant-description animate-right">
+					<div class="global-headline">
+						<h2 class="sub-headline">
+							<span class="first-letter">T</span>ra cứu
+						</h2>
+						<h1 class="headline headline-dark">Món ăn</h1>
+						<div class="asterisk"><i class="fas fa-asterisk"></i></div>
+					</div>
+					<p>
+						Với nguồn dữ liệu phong phú với gần 2000 món ăn được tổng hợp từ những nguồn uy tín <br>
+						Tại đây, SSS mang lại mọi thông tin nấu ăn mà bạn tìm kiếm <br>
+					</p>
+					<a href="/search" class="btn body-btn">Tra cứu</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Family Food ends -->
+	<section class="tasteful-recipes between">
+		<div class="container">
+			<div class="global-headline">
+				<div class="animate-top">
+					<h2 class="sub-headline">
+						<span class="first-letter">N</span>ow
+				</div>
+				<div class="animate-bottom">
+					<h1 class="headline">Shopping is much eassier!</h1>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Tasteful Recipes Ends -->
+	<!-- Discover Menu ends -->
+	<!-- Frn Food ends -->
+	<footer>
+		<div class="container" id="footer">
+			<div class="back-to-top">
+				<a href="#hero"><i class="fas fa-chevron-up"></i></a>
+			</div>
+			<div class="footer-content">
+				<div class="footer-content-about animate-up">
+					<h4>SSS</h4>
+					<div class="asterisk"><i class="fas fa-asterisk"></i></div>
+					<p>
+						We make shopping easier!
+					</p>
+				</div>
+				<div class="footer-content-divider animate-bottom">
+					<div class="social-media">
+						<h4>Follow along</h4>
+						<ul class="social-icons">
+							<li>
+								<a href="#"><i class="fab fa-facebook-square"></i></a>
+							</li>
+							<li>
+								<a href="#"><i class="fab fa-instagram"></i></a>
+							</li>
+							<li>
+								<a href="#"><i class="fab fa-pinterest"></i></a>
+							</li>
+							<li>
+								<a href="#"><i class="fab fa-twitter"></i></a>
+							</li>
+						</ul>
+					</div>
+					<div class="newsletter-container">
+						<h4>Newsletter</h4>
+						<form action="" class="newsletter-form">
+							<input type="text" class="newsletter-input" placeholder="Your email address..">
+							<button class="newsletter-btn" type="submit">
+								<i class="fas fa-envelope"></i>
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<script src="{{ url_for('static',filename='main.js') }}"></script>
 </body>
 
 </html>

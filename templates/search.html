@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooky</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='item-style.css') }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        .search {
+            text-align: center;
+            margin: auto;
+            width: 60%;
+            padding: 10px;
+        }
+
+        #textbox_search {
+            height: 25px;
+            font-size: 14pt;
+            width: 400px;
+        }
+
+        #search_btn {
+            font-size: 20px;
+        }
+
+        #add_btn {
+            font-size: 20px;
+        }
+
+        .recipe {
+            background-color: bisque;
+            font-family: 'Gill Sans';
+            font-size: large;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="intro">
+        <div class="intro-text">
+            <h1 class="hide">
+                <span class="text">We</span>
+            </h1>
+            <h1 class="hide">
+                <span class="text">Make Shopping</span>
+            </h1>
+            <h1 class="hide">
+                <span class="text">Easier!</span>
+            </h1>
+        </div>
+    </div>
+    <div class="slider"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"
+        integrity="sha512-IQLehpLoVS4fNzl7IfH8Iowfm5+RiMGtHykgZJl9AWMgqx0AmJ6cRWcB+GaGVtIsnC4voMfm8f2vwtY+6oPjpQ=="
+        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='intro.js') }}"></script>
+
+    <section class="section search">
+        <div class="search-form">
+            <div class="form-control">
+                <label>Hãy nhập món bạn muốn</label>
+                <input type="text" id="textbox_search" autofocus />
+            </div>
+            <button class="btn btn-primary" id='search_btn'>Tìm Kiếm</button>
+            <button class="btn btn-primary" id='add_btn'>Kiểm tra nguyên liệu</button>
+        </div>
+    </section>
+
+    <div class="row">
+
+
+    </div>
+    <script>
+        $('#textbox_search').keypress(function (e) {
+            var key = e.which;
+            if (key == 13) // the enter key code
+            {
+                $('#search_btn').click();
+                return false;
+            }
+        });
+        $("#search_btn").click(function () {
+            let name = $("#textbox_search").val()
+            if (name != '') {
+                $.getJSON(`/recipes?name=${name}`, function (data) {
+                    ings = data.result;
+                    let a = '';
+
+                    for (var i = 0; i < ings.length; i++) {
+                        a = a + `<div class="col-4">
+                        <img src="${ings[i]['image']}"
+                            alt="">
+                        <div className='cocktail-footer'>
+                            <h3>${ings[i]['name']}</h3>
+                            <h4>Likes: ${ings[i]['likes']}</h4>
+                            <h4 class="???"><a href="/recipeDetails?id=${ings[i]['id']}"><button class="btn btn-details">Details</button></a><h4>
+                                <label class="checkbox">
+                <input type="checkbox" value="${ings[i]['id']}" name="ids"/>
+                <span>Tôi muốn nấu món này</span>
+            </label> 
+                        </div>
+                    </div> `
+
+
+
+                        // a = a + '<div class ="col-4"><p>Ten mon an: ' + ings[i]['name'] + '</p>';
+                        // a = a + '<p>Mota: ' + ings[i]['description'] + '</p>';
+                        // a = a + '<div>Nguyen lieu: <br>';
+                        // for (const [key, value] of Object.entries(ings[i]['ingredients'])) {
+                        //     a = a + '<li>' + key + ' : ' + value + '</li>'
+                        // }
+                        // a = a + '</div></div>'
+                        // a = a + `<input type="checkbox" value="${ings[i]['id']}" name="ids">Thêm</input>`
+                        // a = a + '<br>'
+                    }
+                    if (ings.length == 0) a = "Not Found!"
+                    $(".row").html(a);
+                });
+            }
+        });
+        $("#add_btn").click(function () {
+            var ids = [];
+            $.each($("input[name='ids']:checked"), function () {
+                ids.push($(this).val());
+            });
+            // alert("My favourite sports are: " + favorite.join(", "));
+            window.location.href = "/pre_demo?id=" + ids.join(',');
+        });
+    </script>
+
+</body>
+
+</html>
