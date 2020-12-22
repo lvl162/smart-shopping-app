@@ -34,28 +34,6 @@ def favicon():
     return redirect(url_for('static', filename='favicon.ico'))
 
 
-def gen_frames():  # generate frame by frame from camera
-    camera = cv2.VideoCapture(0)
-    while True:
-        # Capture frame-by-frame
-        success, frame = camera.read()  # read the camera frame
-        if not success:
-            print('no')
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            # print("yes\n")
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-
-
-@app.route('/video_feed')
-def video_feed():
-    # Video streaming route. Put this in the src attribute of an img tag
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
 @app.route('/post_seen', methods=['GET', 'POST'])
 def post_seen():
     if request.method == 'GET':
@@ -87,7 +65,7 @@ def video_feed1():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return jsonify({"error": "404 not found"})
+    return render_template('index.html')
 
 
 @app.route('/pre_demo')
@@ -174,10 +152,13 @@ def get_all_recipes():
             {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients'], 'image': s['image'], 'likes': s['likes'], 'cooking_steps': s['cooking_steps'], 'ration': s['ration']})
     elif name:
         recipe = mongo.db.recipes
+        ids = []
         for s in recipe.find():
             if convert(s['name']).find(convert(name)) >= 0:
-                output.append(
-                    {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients'], 'image': s['image'], 'likes': s['likes'], 'cooking_steps': s['cooking_steps'], 'ration': s['ration']})
+                if s['id'] not in ids:
+                    ids.append(s['id'])
+                    output.append(
+                        {'id': s['id'], 'name': s['name'], 'description': s['description'], 'ingredients': s['ingredients'], 'image': s['image'], 'likes': s['likes'], 'cooking_steps': s['cooking_steps'], 'ration': s['ration']})
     else:
         recipe = mongo.db.recipes
         for s in recipe.find():

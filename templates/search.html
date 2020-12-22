@@ -9,31 +9,18 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
-        .search {
-            text-align: center;
-            margin: auto;
-            width: 60%;
-            padding: 10px;
-        }
-
-        #textbox_search {
-            height: 25px;
-            font-size: 14pt;
-            width: 400px;
-        }
-
-        #search_btn {
-            font-size: 20px;
-        }
-
-        #add_btn {
-            font-size: 20px;
-        }
-
-        .recipe {
-            background-color: bisque;
-            font-family: 'Gill Sans';
-            font-size: large;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
         }
     </style>
 
@@ -67,6 +54,8 @@
             </div>
             <button class="btn btn-primary" id='search_btn'>Tìm Kiếm</button>
             <button class="btn btn-primary" id='add_btn'>Kiểm tra nguyên liệu</button>
+            <button class="btn btn-primary" id='recipes_btn'>Món ăn</button>
+
         </div>
     </section>
 
@@ -74,7 +63,13 @@
 
 
     </div>
+
+    <div id="myModal" class="modal">
+
+    </div>
+
     <script>
+        var picked_recipes = [];
         $('#textbox_search').keypress(function (e) {
             var key = e.which;
             if (key == 13) // the enter key code
@@ -89,7 +84,6 @@
                 $.getJSON(`/recipes?name=${name}`, function (data) {
                     ings = data.result;
                     let a = '';
-
                     for (var i = 0; i < ings.length; i++) {
                         a = a + `<div class="col-4">
                         <img src="${ings[i]['image']}"
@@ -97,38 +91,59 @@
                         <div className='cocktail-footer'>
                             <h3>${ings[i]['name']}</h3>
                             <h4>Likes: ${ings[i]['likes']}</h4>
-                            <h4 class="???"><a href="/recipeDetails?id=${ings[i]['id']}"><button class="btn btn-details">Details</button></a><h4>
+                            <h4 class="???"><a href="/recipeDetails?id=${ings[i]['id']}" target="_blank"><button class="btn btn-details">Details</button></a><h4>
                                 <label class="checkbox">
-                <input type="checkbox" value="${ings[i]['id']}" name="ids"/>
-                <span>Tôi muốn nấu món này</span>
+                <!-- <input type="checkbox" value="${ings[i]['id']}" name="ids"/>
+                // <span>Tôi muốn nấu món này</span> -->
+                <button class="add-recipe-btn" value="${ings[i]['id']}">Thêm</button>
             </label> 
                         </div>
                     </div> `
-
-
-
-                        // a = a + '<div class ="col-4"><p>Ten mon an: ' + ings[i]['name'] + '</p>';
-                        // a = a + '<p>Mota: ' + ings[i]['description'] + '</p>';
-                        // a = a + '<div>Nguyen lieu: <br>';
-                        // for (const [key, value] of Object.entries(ings[i]['ingredients'])) {
-                        //     a = a + '<li>' + key + ' : ' + value + '</li>'
-                        // }
-                        // a = a + '</div></div>'
-                        // a = a + `<input type="checkbox" value="${ings[i]['id']}" name="ids">Thêm</input>`
-                        // a = a + '<br>'
                     }
                     if (ings.length == 0) a = "Not Found!"
                     $(".row").html(a);
+                    $(".add-recipe-btn").click(function () {
+                        let modal = document.getElementById("myModal");
+                        let name = $(this).parent().parent().prev().prev().prev().html();
+                        let id = $(this).attr('value');
+                        if (picked_recipes.indexOf(id) == -1) {
+                            picked_recipes.push(id);
+                            $("#myModal").append(`<div id='ingre-${id}'><h4>Ten mon an: ${name}</h4>
+                        <button class="del-recipe-btn" value='${id}'>Xoa</button></div>`);
+                            modal.style.display = "block";
+                            $(".del-recipe-btn").click(function () {
+                                let id = $(this).attr('value');
+                                $("#ingre-" + id).remove();
+                                console.log("delete" + id);
+
+                            });
+                        }
+                        else {
+                            alert("Món ăn này đã được thêm!");
+                        }
+                    });
+
+
                 });
             }
         });
+        $("#recipes_btn").click(function () {
+            let modal = document.getElementById("myModal");
+            modal.style.display = "block";
+
+        });
+        window.onclick = function (event) {
+            let modal = document.getElementById("myModal");
+
+            if (event.target == modal) {
+                modal.style.display = "none";
+
+            }
+        }
         $("#add_btn").click(function () {
-            var ids = [];
-            $.each($("input[name='ids']:checked"), function () {
-                ids.push($(this).val());
-            });
-            // alert("My favourite sports are: " + favorite.join(", "));
-            window.location.href = "/pre_demo?id=" + ids.join(',');
+            if (picked_recipes.length == 0) alert("Bạn vẫn chưa chọn món nào!");
+            else
+                window.location.href = "/pre_demo?id=" + picked_recipes.join(',');
         });
     </script>
 
