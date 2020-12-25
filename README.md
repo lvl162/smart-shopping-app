@@ -1,5 +1,6 @@
-# Live-Streaming-using-OpenCV-Flask
-A Flask Web-App to stream live from local webcam or CCTV (rtsp link)
+# IOT PROJECT Y3S1
+Hệ thống mua sắm thông minh
+Sử dụng YoloV5 nhận diện vật thể giúp việc mua sắm trở nên dễ dàng. 
 
 ## Use Built-in Webcam of Laptop
 

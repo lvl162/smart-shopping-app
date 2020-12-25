@@ -46,3 +46,11 @@ If we start at a high learning rate our model often diverges due to unstable gra
 To avoid overfitting we use dropout and extensive data augmentation. A dropout layer with rate = .5 after the first connected layer prevents co-adaptation between layers [18].
 For data augmentation we introduce random scaling and translations of up to 20% of the original image size. We also randomly adjust the exposure and saturation of the image by up to a factor of 1.5 in the HSV color space.
 
+
+
+- Ghi thêm, nhấn mạnh về dataset 
+- Giảm lt yolo
+- So sánh Faster RCNN vs YoloV5
+- Bỏ bớt đồ thị
+- Vẽ lại sơ đồ khối bằng các ô vuông
+

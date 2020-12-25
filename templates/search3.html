@@ -1,0 +1,90 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='item-style.css') }}">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- <div class="intro">
+      <div class="intro-text">
+        <h1 class="hide">
+          <span class="text">We</span>
+        </h1>
+        <h1 class="hide">
+          <span class="text">Make Shopping</span>
+        </h1>
+        <h1 class="hide">
+          <span class="text">Easier!</span>
+        </h1>
+      </div>
+    </div>
+
+    <div class="slider"></div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"
+      integrity="sha512-IQLehpLoVS4fNzl7IfH8Iowfm5+RiMGtHykgZJl9AWMgqx0AmJ6cRWcB+GaGVtIsnC4voMfm8f2vwtY+6oPjpQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./intro.js"></script> -->
+
+    <div class="container" id="blur">
+
+        <section class="section search">
+            <div class="search-form">
+                <div class="form-control">
+                    <label>Hãy nhập món bạn muốn</label>
+                    <input type="text" name="name" id="name" />
+                </div>
+                <button class="btn btn-primary">Tìm Kiếm</button>
+                <button class="btn btn-primary">Kiểm tra nguyên liệu</button>
+                <button class="btn btn-primary" onclick=toggle()>Đã thêm</button>
+            </div>
+        </section>
+
+        <!-- <div class="small-container">
+        <div class="row">
+          <div class="col-4">
+            <img src="https://vnreview.vn/image/18/84/39/1884395.jpg" alt="" />
+            <div className="cocktail-footer">
+              <h3>Mì gói sinh viên</h3>
+              <h4>{glass}</h4>
+              <p>{info}</p>
+              <a href="singleItem.html"
+                ><button class="btn btn-details">Details</button></a
+              ><br />
+            </div>
+        </div>
+      </div> -->
+
+    </div>
+
+    <script type="text/javascript">
+        function toggle() {
+            console.log("Active");
+            var blur = document.getElementById('blur');
+            blur.classList.toggle('active');
+            var added = document.getElementById('added');
+            added.classList.toggle('active');
+        }
+    </script>
+
+    <div class="added" id="added">
+        <section class="ingre">
+            <h3 class="section-title">Đã thêm</h3>
+            <div class="item">
+                <h4>name</h4>
+                <a href="">Xóa</a>
+            </div>
+            <div class="item">
+                <h4>name</h4>
+                <a href="">Xóa</a>
+            </div>
+            <a class="btn btn-primary" onclick="toggle()">Close</a>
+    </div>
+</body>
+
+</html>

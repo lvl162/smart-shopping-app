@@ -56,8 +56,8 @@ def get_seen():
 @app.route('/video_feed1')
 def video_feed1():
     # Video streaming route. Put this in the src attribute of an img tag
-    stream_url = "http://192.168.137.135:8080/video"
-    # stream_url = "http://192.168.0.10:8000/stream.mjpg"
+    # stream_url = "http://192.168.1.107:8080/video"
+    stream_url = "http://192.168.0.10:8000/stream.mjpg"
     # stream_url = "0"
     weights_path = './best_1000_7.pt'
     return Response(detect(source=stream_url, conf_thres=0.7, weights=weights_path), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -97,6 +97,11 @@ def demo():
 @app.route('/search')
 def search():
     return render_template('search.html')
+
+
+@app.route('/search3')
+def search3():
+    return render_template('search3.html')
 
 
 @app.route('/index')
