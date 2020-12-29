@@ -16,6 +16,7 @@
     <script>
         $(document).ready(function () {
             var ings;
+            var redo = [];
             $.getJSON('/ingredients?id={{ ids }}&rm={{ rms }}', function (data) {
                 ings = data.result;
                 let a = '';
@@ -41,17 +42,18 @@
                         }
 
                     }
+                    if (b == '') $("#end").html("Bạn đã mua hết");
                     $("#ing").html(b);
 
                 });
-            }, 100);
+            }, 200);
         });
 
     </script>
     <div class="row">
         <div class="column left">
             <section class="ingre">
-                <h3 class="section-title">Cần mua</h3>
+                <h3 class="section-title" id='end'>Cần mua</h3>
                 <div id='ing'></div>
                 <!-- <div class="item">
                     <h4>name</h4>
@@ -65,8 +67,8 @@
         </div>
         <div class="column right">
             <section class="livestream">
-                <h3 class="section-title">Theo dõi quá trình đi chợ</h3>
-                <img width="100%" height="100%" src="{{ url_for('video_feed1') }}" alt="">
+                <h4 class="section-title">Theo dõi quá trình đi chợ</h4>
+                <img width="95%" height="95%" src="{{ url_for('video_feed1') }}" alt="">
                 <!-- <img width="100%" height="100%"
                     src="https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg" alt=""> -->
             </section>

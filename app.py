@@ -56,10 +56,9 @@ def get_seen():
 @app.route('/video_feed1')
 def video_feed1():
     # Video streaming route. Put this in the src attribute of an img tag
-    # stream_url = "http://192.168.1.107:8080/video"
-    stream_url = "http://192.168.0.10:8000/stream.mjpg"
-    # stream_url = "0"
-    weights_path = './best_1000_7.pt'
+    stream_url = "http://192.168.43.1:8080/video"
+    # stream_url = "http://192.168.43.15:8000/stream.mjpg"
+    weights_path = './best_5000_7.pt'
     return Response(detect(source=stream_url, conf_thres=0.7, weights=weights_path), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

@@ -435,8 +435,7 @@ Cocktail
 }
 
 .col-4 img {
-  height: 20vh;
-  width: 35vh;
+  width: 100%;
 }
 
 .row {
@@ -478,7 +477,7 @@ Cocktail
   transform: translateY(-5px);
 }
 
-.ingre button {
+.ingre a {
   display: flex;
   justify-content: center;
 }
@@ -564,11 +563,10 @@ Cocktail
   transform: translateY(100%);
   display: inline-block;
 }
-
 .column {
   float: left;
   padding: 10px;
-  height: 300px;
+  height: 100%; /* Should be removed. Only for demonstration */
 }
 
 .left {
@@ -579,19 +577,25 @@ Cocktail
   width: 75%;
 }
 
-
+/* Clear floats after the columns */
 .row:after {
   content: "";
   display: table;
   clear: both;
 }
 
-.livestream img {
-  margin-left: 30px;
-  width: 90%;
+#livestreamimg{
+  width: 200px;
+  height: 100px;
 }
 
 .container.active {
+  filter: blur(10px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.row.active{
   filter: blur(10px);
   pointer-events: none;
   user-select: none;
@@ -621,3 +625,21 @@ Cocktail
   align-items: center;
   justify-content: center;
 }
+
+.col-4 img{
+  width: 320px;
+  height: 200px;
+}
+
+.drink img{
+  width: 500px;
+  height: 500px;
+}
+
+#description{
+  margin-bottom: 25px;
+}
+
+/* .cocktail-footer a{
+  margin-top: -10rem;
+} */

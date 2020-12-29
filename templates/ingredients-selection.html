@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='item-style.css') }}">
 
-    <title>Chọn nguyên liệu!!</title>
+    <title>Chọn nguyên liệu</title>
 </head>
 
 <body>
@@ -22,10 +22,11 @@
             var ings;
             var choosen;
             var rms = [];
+            var redo = [];
             $.getJSON("/ingredients?id={{ ids }}", function (data) {
                 ings = data.result;
                 choosen = Array.from(ings);
-                let a = '<h3 class="section-title">Lựa chọn nguyên liệu</h3>';
+                let a = '<h3 class="section-title">Lựa chọn nguyên liệu</h3><div id="item-container">';
                 for (var i = 0; i < ings.length; i++) {
                     a = a + `<div class="item" id='ingre-${i}'>
                             <h4 id='${i}'>${ings[i].toString()}</h4>
@@ -33,13 +34,14 @@
                             </div>`;
                 }
                 // a = a + '<a href="/demo?id={{ ids }}"><button class="btn btn-primary">Theo dõi quá trình đi chợ</button></a>';
-                a = a + '<a><button class="btn btn-primary">Theo dõi quá trình đi chợ</button></a>';
+                a = a + '</div><a><button class="btn btn-primary" id="forward">Theo dõi quá trình đi chợ</button></a>';
+                a = a + '<a><button class="btn btn-primary" id="back">Hoàn tác</button></a>';
 
                 if (ings.length == 0) a = 'Khong tim thay gi!!';
 
                 $("#recipe1").html(a);
-                $(".no_buy").click(function () {
-                    if (confirm('Chac chua?')) {
+                $(document).on('click', '.no_buy', function () {
+                    if (confirm('Bạn có chắc muốn xóa nguyên liệu này?')) {
                         Array.prototype.remove = function () {
                             var what, a = arguments, L = a.length, ax;
                             while (L && this.length) {
@@ -55,15 +57,24 @@
                         rms.push(id);
                         let name = $(this).prev().html();
                         choosen.remove(name);
+                        redo.push(`<div class="item" id='ingre-${id}'>
+                            ${$("#ingre-" + id).html()}
+                        </div>`);
                         $("#ingre-" + id).remove();
-                    } else {
                     }
 
                 });
-                $('.btn-primary').click(function () {
-                    if (rms.length != 0)
-                        window.location.href = "/demo?id={{ ids }}&rm=" + rms.join(',');
-                    else window.location.href = "/demo?id={{ ids }}";
+                $('#forward').click(function () {
+                    if ($("#item-container").html() == '') { alert("Danh sách nguyên liệu trống.") }
+                    else {
+                        if (rms.length != 0)
+                            window.location.href = "/demo?id={{ ids }}&rm=" + rms.join(',');
+                        else window.location.href = "/demo?id={{ ids }}";
+                    }
+                });
+                $('#back').click(function () {
+                    $('#item-container').append(redo.pop());
+                    rms.pop();
                 });
             });
 

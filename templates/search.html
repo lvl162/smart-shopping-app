@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cooky</title>
+    <title>Tìm kiếm món ăn bạn yêu thích</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='item-style.css') }}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -45,30 +45,45 @@
         integrity="sha512-IQLehpLoVS4fNzl7IfH8Iowfm5+RiMGtHykgZJl9AWMgqx0AmJ6cRWcB+GaGVtIsnC4voMfm8f2vwtY+6oPjpQ=="
         crossorigin="anonymous"></script>
     <script src="{{ url_for('static',filename='intro.js') }}"></script>
+    <div class="container" id="blur">
+        <section class="section search">
+            <div class="search-form">
+                <div class="form-control">
+                    <label>Hãy nhập món bạn muốn</label>
+                    <input type="text" id="textbox_search" autofocus />
+                </div>
+                <button class="btn btn-primary" id='search_btn'>Tìm Kiếm</button>
+                <button class="btn btn-primary" id='add_btn'>Kiểm tra nguyên liệu</button>
+                <button class="btn btn-primary" id='recipes_btn' onclick="toggle()">Đã thêm</button>
 
-    <section class="section search">
-        <div class="search-form">
-            <div class="form-control">
-                <label>Hãy nhập món bạn muốn</label>
-                <input type="text" id="textbox_search" autofocus />
             </div>
-            <button class="btn btn-primary" id='search_btn'>Tìm Kiếm</button>
-            <button class="btn btn-primary" id='add_btn'>Kiểm tra nguyên liệu</button>
-            <button class="btn btn-primary" id='recipes_btn'>Món ăn</button>
-
-        </div>
-    </section>
-
-    <div class="row">
-
+        </section>
 
     </div>
+    <div class="row" id="blur1">
+    </div>
 
+    <div class="added" id="added">
+        <section class="ingre">
+            <h3 class="section-title">Đã thêm</h3>
+            <div id='list-item'>
+            </div>
+
+            <a class="btn btn-primary" onclick="toggle()">Close</a>
+    </div>
     <div id="myModal" class="modal">
 
     </div>
 
     <script>
+        function toggle() {
+            var blur = document.getElementById('blur1');
+            blur.classList.toggle('active');
+            var added = document.getElementById('added');
+            added.classList.toggle('active');
+            var blur = document.getElementById('blur');
+            blur.classList.toggle('active');
+        }
         var picked_recipes = [];
         $('#textbox_search').keypress(function (e) {
             var key = e.which;
@@ -95,9 +110,9 @@
                                 <label class="checkbox">
                 <!-- <input type="checkbox" value="${ings[i]['id']}" name="ids"/>
                 // <span>Tôi muốn nấu món này</span> -->
-                <button class="add-recipe-btn" value="${ings[i]['id']}">Thêm</button>
+                <button class="btn btn-primary add-recipe-btn" value="${ings[i]['id']}" id="${ings[i]['id']}">Thêm</button>
             </label> 
-                        </div>
+                        </div>  
                     </div> `
                     }
                     if (ings.length == 0) a = "Not Found!"
@@ -108,9 +123,9 @@
                         let id = $(this).attr('value');
                         if (picked_recipes.indexOf(id) == -1) {
                             picked_recipes.push(id);
-                            $("#myModal").append(`<div id='ingre-${id}'><h4>Ten mon an: ${name}</h4>
-                        <button class="del-recipe-btn" value='${id}'>Xoa</button></div>`);
-                            modal.style.display = "block";
+                            $("#list-item").append(`<div class="item" id='ingre-${id}'><h4>${name}</h4>
+                        <button class="del-recipe-btn" value='${id}'>Xóa</button></div>`);
+                            toggle();
                             $(".del-recipe-btn").click(function () {
                                 let id = $(this).attr('value');
                                 $("#ingre-" + id).remove();
@@ -136,19 +151,14 @@
                 });
             }
         });
-        $("#recipes_btn").click(function () {
-            let modal = document.getElementById("myModal");
-            modal.style.display = "block";
+        // window.onclick = function (event) {
+        //     let modal = document.getElementById("myModal");
 
-        });
-        window.onclick = function (event) {
-            let modal = document.getElementById("myModal");
+        //     if (event.target == modal) {
+        //         modal.style.display = "none";
 
-            if (event.target == modal) {
-                modal.style.display = "none";
-
-            }
-        }
+        //     }
+        // }
         $("#add_btn").click(function () {
             if (picked_recipes.length == 0) alert("Bạn vẫn chưa chọn món nào!");
             else
