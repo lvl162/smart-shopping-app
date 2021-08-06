@@ -1,28 +1,24 @@
-# IOT PROJECT Y3S1
+# About
+### IOT PROJECT Y3S1
 Hệ thống mua sắm thông minh
 Sử dụng YoloV5 nhận diện vật thể giúp việc mua sắm trở nên dễ dàng. 
+`Databases recipes using mongodb
+Flask as a backend`
+# Features
 
-## Use Built-in Webcam of Laptop
+### 1. Searching for a cooking recipe
+- About 1.5k Vietnamese recipes
+- Make a new recipe and share
+### 2. Tracking for recipe ingredient
+- Using `object detection YoloV5` to detect and track if ingredients is full filled or missing
 
-### Put Zero (O) in cv2.VideoCapture(0)
 
-``` cv2.VideoCapture(0) ```
+# How to run
 
-### Use Ip Camera/CCTV/RTSP Link
-``` cv2.VideoCapture('rtsp://username:password@camera_ip_address:554/user=username_password='password'_channel=channel_number_stream=0.sdp')  ```
+``` python server.py ```
 
-### Example RTSP Link
-``` cv2.VideoCapture('rtsp://mamun:123456@101.134.16.117:554/user=mamun_password=123456_channel=0_stream=0.sdp') ```
+# Demo
 
-### Change Channel Number to Change the Camera
-``` cv2.VideoCapture('rtsp://mamun:123456@101.134.16.117:554/user=mamun_password=123456_channel=1_stream=0.sdp') ```
+Still not be deloyed
 
-### Display the resulting frame in browser
-``` cv2.imencode('.jpg', frame)[1].tobytes() ```
-
-### Or this one
-```
-net , buffer = cv2.imencode('.jpg', frame)
-buffer.tobytes()              
-```
 
